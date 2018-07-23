@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>간단한 지도 표시하기</title>
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=Ozj5ODozVr_1IxszDUuD"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="./data/accidentdeath.js"></script>
+    <script type="text/javascript" src="./MarkerClustering.js"></script>
+    <script type="text/javascript" src="./main.js"></script>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map" style="width:100%;height:100%;"></div>
+    <script>
+
+        var htmlMarker1 = {
+            content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(./img/cluster-marker-1.png);background-size:contain;"></div>',
+            size: N.Size(40, 40),
+            anchor: N.Point(20, 20)
+        },
+            htmlMarker2 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(./img/cluster-marker-2.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            },
+            htmlMarker3 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(./img/cluster-marker-3.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            },
+            htmlMarker4 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(./img/cluster-marker-4.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            },
+            htmlMarker5 = {
+                content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(./img/cluster-marker-5.png);background-size:contain;"></div>',
+                size: N.Size(40, 40),
+                anchor: N.Point(20, 20)
+            };               
+               
+        var MARKER_ICON_URL = 'img/lion.png';
+        var MARKER_HIGHLIGHT_ICON_URL = 'img/bono.png';
+        var selectedMarker;
+
+
+        var lastIndex;
+        var markerList = [];
+        var markerClustering;
+        var mapOptions = {
+            center: new naver.maps.LatLng(37.3595704, 127.105399),
+        };
+        var map = new naver.maps.Map('map', mapOptions);
+        var position = new naver.maps.LatLng(37.3595704, 127.105399);
+        var listenerList = [];
+        var menuLayer = $('<div style="position:absolute;z-index:10000;background-color:#fff;border:solid 1px #333;padding:10px;display:none;"></div>');
+        map.getPanes().floatPane.appendChild(menuLayer[0]);
+        naver.maps.Event.addListener(map, 'click', function (e) {
+            if (selectedMarker)     
+                unhighlightMarker(selectedMarker);
+                selectedMarker = null;
+        });
+
+
+        loadDefaultData();
+
+      
+        //for (var i = 0; i < len; i++ )
+        //{
+        //    var marker = markerClustering.getMarkers()[i];
+        //    naver.maps.Event.addListener(marker, 'click', function (e) {
+        //        console.log(JSON.stringify(marker));
+        //    });
+        //}
+
+
+        /* function Start */
+        
+        function addMarker(position)
+        {
+            var markerOptions = {
+                position: position,
+                map: map,
+                icon: {
+                    url: 'img/lion.png',
+                    scaledSize: new naver.maps.Size(50, 50)
+                }
+            };            
+            var marker = new naver.maps.Marker(markerOptions);
+            markerList.push(marker);
+            var lastIndex = markerList.length - 1;
+            naver.maps.Event.addListener(markerList[lastIndex], 'click', getClickHandler(lastIndex));           
+ //         markerClustering.setMarkers(markerList);
+        }
+        function deleteAllMarkers() {
+            var len = markerClustering.getMarkers.length;
+            for (var i = 0, ii = len; i < ii; i++) {
+                markerList.pop();
+ //             markerClustering.getMarkers()[i].setMap(null);
+            }
+            markerList = [];
+            markerClustering.setMarkers(markerList);
+            for (var i = 0, ii = len; i < ii; i++) {
+                naver.maps.Event.removeListener(listenerList[i]);
+                listenerList[i] = null;
+            }
+            listenerList = null;
+        }
+
+        function highlightMarker(marker) {
+            var icon = marker.getIcon();
+            console.log("icon-url = " + icon.url);
+            if (icon.url !== MARKER_HIGHLIGHT_ICON_URL) {
+                icon.url = MARKER_HIGHLIGHT_ICON_URL;
+                marker.setIcon(icon);
+                JSReceiver.ShowPanel();
+            }
+            marker.setZIndex(1000);
+
+            console.log("Icon Changed");
+         
+        }
+
+        function unhighlightMarker(marker) {
+            var icon = marker.getIcon();
+            console.log("icon-url = " + icon.url);
+            if (icon.url === MARKER_HIGHLIGHT_ICON_URL) {
+                icon.url = MARKER_ICON_URL;
+                marker.setIcon(icon);
+                JSReceiver.HidePanel();    
+            }
+            marker.setZIndex(100);
+            console.log("Icon  UnChanged");
+       
+        }
+        function getClickHandler(seq) {
+            return function (e) {
+                var marker = markerList[seq];
+                processMarkerClickHandler(marker);
+            }
+        }
+        function processMarkerClickHandler(marker) {
+            if (selectedMarker) {
+                if (selectedMarker === marker)
+                    return;
+                unhighlightMarker(selectedMarker);
+            }              
+            selectedMarker = marker;
+            highlightMarker(selectedMarker);
+            //console.log(JSON.stringify(marker.getPosition()));
+        }
+        function loadDefaultData() {            
+            data = accidentDeath.searchResult.accidentDeath;
+            for (var i = 0, ii = data.length; i < ii; i++) {
+                var spot = data[i],
+                    latlng = new naver.maps.LatLng(spot.grd_la, spot.grd_lo),
+                    marker = new naver.maps.Marker({
+                        position: latlng,                       
+                        icon: {
+                            url: 'img/lion.png',
+                            scaledSize: new naver.maps.Size(50, 50)
+                        }
+                    });                    
+                markerList.push(marker);
+            }
+            for (var i = 0, ii = data.length; i < ii; i++) {
+                listenerList.push( naver.maps.Event.addListener(markerList[i], 'click', getClickHandler(i)));
+            }
+            updateCluster(); 
+            lastIndex = markerList.length;
+        }
+
+        function updateCluster() {
+            markerClustering = null;
+            markerClustering = new MarkerClustering({
+                minClusterSize: 2,
+                maxZoom: 14,
+                map: map,
+                markers: markerList,
+                disableClickZoom: false,
+                draggable: true,
+                zIndex: 100,
+                gridSize: 120,
+                icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
+                indexGenerator: [10, 100, 200, 500, 1000],
+                stylingFunction: function (clusterMarker, count) {
+                    $(clusterMarker.getElement()).find('div:first-child').text(count);
+                }
+            });         
+        }
+    </script>
+</body>
+</html>

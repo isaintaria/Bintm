@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    android:gravity="center"
+
+    android:orientation="vertical"
+    tools:context="com.ng.socialtest.LoginActivity">
+
+    <Button
+        android:id="@+id/button_Kakao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="카카오로그인" />
+
+    <Button
+    android:id="@+id/button_google"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="구글 로그인" />
+
+    <Button
+        android:id="@+id/button_naver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="네이버 로그인" />
+    <Button
+        android:id="@+id/button_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="페이스북 로그인" />
+
+    <Button
+        android:id="@+id/button_Logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="로그아웃" />
+</LinearLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "70642079280",
+    "firebase_url": "https://social-test-208906.firebaseio.com",
+    "project_id": "social-test-208906",
+    "storage_bucket": "social-test-208906.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70642079280:android:72b8f34b04d8b76f",
+        "android_client_info": {
+          "package_name": "com.ng.socialtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70642079280-pviiib9fk0tan1pese5bib3g5ni7r0oa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ng.socialtest",
+            "certificate_hash": "3f499ae3a346d5b9fd1db93abeff4965ac44124b"
+          }
+        },
+        {
+          "client_id": "70642079280-r4k6fa777n5m37vatg1tbdft2nr972lq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ61CCJr9vyDRQ0wpf_jpsg80MhV-zPTY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70642079280-r4k6fa777n5m37vatg1tbdft2nr972lq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
